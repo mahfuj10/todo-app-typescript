@@ -30,23 +30,36 @@ const Home = () => {
 
     const onAddTodo = useCallback(() => {
         if (newTodoRef.current) {
-            dispatch({ type: 'ADD', text: newTodoRef.current.value })
-            newTodoRef.current.value = '';
-        }
-    }, [])
-    console.log(Object.values(todos))
+            if (newTodoRef.current.value === '') {
+                return;
+            } else {
+                dispatch({ type: 'ADD', text: newTodoRef.current.value })
+                newTodoRef.current.value = '';
+            }
 
-    //  JSON.parse(localStorage.getItem("todos"));
-    localStorage.setItem("todos", JSON.stringify(Object.values(todos)));
+        }
+
+    }, [])
+
+
+    const buttonHandler = useCallback((event) => {
+        if (event.keyCode === 13) {
+            onAddTodo();
+        }
+    }, [onAddTodo])
+
+
+
+
 
     return (
 
         <Container>
 
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
 
-                <input style={{ padding: 9 }} ref={newTodoRef} type="text" />
+                <input onKeyUp={buttonHandler} style={{ padding: 8, border: '2px solid #1976D2' }} ref={newTodoRef} type="text" />
 
                 <Button sx={{ boxShadow: 0, borderRadius: 0 }} onClick={onAddTodo} variant='contained'><AddIcon /></Button>
             </Box>
